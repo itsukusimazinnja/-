@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ノベルゲーム基礎</title>
+  <!-- CSSファイルを読み込んで見た目を適用する -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ゲーム画面全体の枠組み -->
+  <div id="game-container">
+    
+    <!-- キャラクターや背景画像を表示するためのエリア（後から画像タグなどを入れます） -->
+    <div id="character-area"></div>
+
+    <!-- メッセージウィンドウ（クリックするとscript.jsのnextText()が実行される） -->
+    <div id="textbox" onclick="nextText()">
+      <!-- キャラクターの名前が入る場所 -->
+      <div id="speaker-name"></div>
+      <!-- セリフ・地の文が入る場所 -->
+      <div id="message"></div>
+    </div>
+
+  </div>
+
+  <!-- JavaScriptファイルを読み込んでゲームの動きを処理する -->
+  <script src="script.js"></script>
+</body>
+</html>
+
+/* 画面全体の設定 */
+body {
+  margin: 0;
+  background-color: #111; /* ゲーム枠の外側の背景色（黒寄り） */
+  color: #fff;
+  display: flex;
+  justify-content: center; /* 画面中央に配置 */
+  align-items: center;
+  height: 100vh;
+  font-family: sans-serif;
+}
+
+/* ゲーム画面本体の設定（ここをいじると画面サイズが変わる） */
+#game-container {
+  width: 800px;  /* ゲーム画面の幅 */
+  height: 600px; /* ゲーム画面の高さ */
+  background-color: #222; /* 画像がない時の画面背景色 */
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #555;
+}
+
+/* テキストボックス（画面下のメッセージ枠）の設定 */
+#textbox {
+  position: absolute;
+  bottom: 20px;          /* 下からの位置 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;            /* 横幅（ゲーム画面の90%） */
+  height: 120px;         /* 縦幅 */
+  background: rgba(0, 0, 0, 0.8); /* 背景の黒（最後の0.8で透明度調整） */
+  border: 2px solid #fff;  /* 枠線の太さと色 */
+  border-radius: 8px;     /* 角の丸み */
+  padding: 15px;         /* 内側の余白 */
+  box-sizing: border-box;
+  cursor: pointer;       /* マウスカーソルを指の形にする */
+}
+
+/* 話者名（キャラクター名）の見た目 */
+#speaker-name {
+  font-weight: bold;
+  color: #ffd700;        /* 文字の色（現在は金色） */
+  margin-bottom: 5px;   /* セリフとの間の余白 */
+}
+
+/* セリフ本文の見た目 */
+#message {
+  line-height: 1.5;      /* 行間 */
+}
+// ==========================================
+// 【重要】ここにシナリオを書いていく
+// name: 表示したい名前（""にすると地の文）
+// text: 表示したい文章
+// ==========================================
+const scenario = [
+  { name: "主人公", text: "ここはどこだろう……？" },
+  { name: "謎の少女", text: "目が覚めた？よかった。" },
+  { name: "主人公", text: "君は一体……？" },
+  { name: "", text: "（物語はここから始まる――）" } 
+  // ↑ 行を増やしたい場合は、末尾にカンマ(,)をつけて { name: "...", text: "..." } を追加する
+];
+
+// 現在何番目のシナリオを表示しているかを管理する変数（0 = 1行目）
+let currentIndex = 0;
+
+// 画面にテキストを表示させる処理
+function showScene() {
+  // 現在の番号のシナリオデータを取得
+  const currentData = scenario[currentIndex];
+
+  // HTMLの該当する場所に文字を流し込む
+  document.getElementById("speaker-name").textContent = currentData.name;
+  document.getElementById("message").textContent = currentData.text;
+}
+
+// クリックされた時に実行される処理
+function nextText() {
+  // まだシナリオの途中の場合
+  if (currentIndex < scenario.length - 1) {
+    currentIndex++; // 次の文章へ（番号を1増やす）
+    showScene();     // 画面表示を更新
+  } else {
+    // 最後の文章まで行った時の処理
+    alert("体験版はここまでです。");
+  }
+}
+
+// ページを開いた瞬間に、最初の文章（0番目）を表示する
+showScene();
+
+    
 
